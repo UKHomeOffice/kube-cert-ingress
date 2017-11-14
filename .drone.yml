@@ -1,0 +1,37 @@
+workspace:
+  base: /go
+  path: src/github.com/UKHomeOffice/kube-cert-ingress
+
+pipeline:
+  tests:
+    image: golang:1.9
+    commands:
+      - make test
+      - make static
+    when:
+      event: [pull_request, push, tag]
+
+  latest:
+    image: docker:17.10.0
+    environment:
+      - DOCKER_HOST=tcp://172.17.0.1:2375
+    secrets: [docker_password]
+    commands:
+      - docker build -t quay.io/ukhomeofficedigital/kube-cert-manager:latest .
+      - docker login -u="ukhomeofficedigital+kube_cert_ingress" -p=$${DOCKER_PASSWORD} quay.io
+      - docker push quay.io/ukhomeofficedigital/kube-cert-manager:latest
+    when:
+      event: push
+      branch: master
+
+  tagged:
+    image: docker:17.10.0
+    environment:
+      - DOCKER_HOST=tcp://172.17.0.1:2375
+    secrets: [docker_password]
+    commands:
+      - docker build -t quay.io/ukhomeofficedigital/kube-cert-manager:$${DRONE_TAG} .
+      - docker login -u="ukhomeofficedigital+kube_cert_ingress" -p=$${DOCKER_PASSWORD} quay.io
+      - docker push quay.io/ukhomeofficedigital/kube-cert-manager:$${DRONE_TAG}
+    when:
+      event: tag

@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kube-cert-ingress
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: kube-cert-ingress
+      annotations:
+        build: "https://github.com/UKHomeOffice/kube-cert-ingress"
+        owner: "devops@digital.homeoffice.gov.uk"
+    spec:
+      serviceAccount: kube-cert-ingress
+      containers:
+      - name: controller
+        image: quay.io/ukhomeofficedigital/kube-cert-ingress:v0.0.1
+        imagePullPolicy: Always
+        securityContext:
+          runAsNonRoot: true
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        args:
+        - --namespace=kube-certificates
+        - --kube-cert-service=kube-cert-manager
+        - --kube-cert-service-port=8080
+        - --ingress-name=webhooks
+        - --interval=10s
+        - --kube-cert-class=default
+        - --enable-events=false
+        - --enable-metrics=false
+        - --verbose=true
+        volumeMounts:
+        - name: bundle
+          mountPath: /etc/ssl/certs
+          readOnly: true
+      volumes:
+      - name: bundle
+        configMap:
+          name: bundle

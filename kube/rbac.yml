@@ -1,0 +1,44 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: acp:kube-cert-ingress
+rules:
+- apiGroups:
+  - v1
+  resources:
+  - namespaces
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - v1
+  resources:
+  - events
+  verbs:
+  - create
+- apiGroups:
+  - "*"
+  resources:
+  - ingresses
+  verbs:
+  - create
+  - update
+- nonResourceURLs:
+  - "*"
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: acp:kube-cert-ingress
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: acp:kube-cert-ingress
+subjects:
+- kind: ServiceAccount
+  name: kube-cert-ingress
+  namespace: kube-certificates

@@ -1,0 +1,4 @@
+*.swp
+vendor/
+bin/
+release
