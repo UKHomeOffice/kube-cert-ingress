@@ -28,7 +28,7 @@ var (
 	// Version is the controller version
 	Version = "v0.0.1"
 	// GitSHA is the build sha
-	GitSHA = "unknown"
+	GitSHA = "unset"
 )
 
 func main() {
