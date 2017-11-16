@@ -17,9 +17,9 @@ pipeline:
       - DOCKER_HOST=tcp://172.17.0.1:2375
     secrets: [docker_password]
     commands:
-      - docker build -t quay.io/ukhomeofficedigital/kube-cert-manager:latest .
+      - docker build -t quay.io/ukhomeofficedigital/kube-cert-ingress:latest .
       - docker login -u="ukhomeofficedigital+kube_cert_ingress" -p=$${DOCKER_PASSWORD} quay.io
-      - docker push quay.io/ukhomeofficedigital/kube-cert-manager:latest
+      - docker push quay.io/ukhomeofficedigital/kube-cert-ingress:latest
     when:
       event: push
       branch: master
@@ -30,8 +30,8 @@ pipeline:
       - DOCKER_HOST=tcp://172.17.0.1:2375
     secrets: [docker_password]
     commands:
-      - docker build -t quay.io/ukhomeofficedigital/kube-cert-manager:$${DRONE_TAG} .
+      - docker build -t quay.io/ukhomeofficedigital/kube-cert-ingress:$${DRONE_TAG} .
       - docker login -u="ukhomeofficedigital+kube_cert_ingress" -p=$${DOCKER_PASSWORD} quay.io
-      - docker push quay.io/ukhomeofficedigital/kube-cert-manager:$${DRONE_TAG}
+      - docker push quay.io/ukhomeofficedigital/kube-cert-ingress:$${DRONE_TAG}
     when:
       event: tag
