@@ -1,2 +1,3 @@
 package: github.com/UKHomeOffice/kube-cert-ingress
-import: []
+import:
+- package: go.uber.org/ratelimit

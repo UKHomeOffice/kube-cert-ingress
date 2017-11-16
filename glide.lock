@@ -1,5 +1,5 @@
-hash: 20f12304c99ac1011de0afce213fdda03f4011003150f9ba655f3d25d82a35b5
-updated: 2017-11-14T11:16:14.220579718Z
+hash: a2e13cb6f18a28763b33e06b95cd5c3a3009f01cd397729dac65d0d6d53068d1
+updated: 2017-11-16T16:31:30.593480861Z
 imports:
 - name: github.com/davecgh/go-spew
   version: 782f4967f2dc4564575ca782fe2d04090b5faca8
@@ -71,9 +71,13 @@ imports:
 - name: github.com/spf13/pflag
   version: 9ff6c6923cfffbcd502984b8e0c80539a94968b7
 - name: github.com/urfave/cli
-  version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
+  version: 0bdeddeeb0f650497d603c4ad7b20cfe685682f6
+- name: go.uber.org/ratelimit
+  version: d15fa2e2a63dd52104bc96d8ea7dc47ce8027de8
+  subpackages:
+  - internal/clock
 - name: golang.org/x/crypto
-  version: 81e90905daefcd6fd217b62423c0908922eadb30
+  version: dd85ac7e6a88fc6ca420478e934de5f1a42dd3c6
   subpackages:
   - ssh/terminal
 - name: golang.org/x/net
@@ -84,10 +88,9 @@ imports:
   - idna
   - lex/httplex
 - name: golang.org/x/sys
-  version: 7ddbeae9ae08c6a06a59597f0c9edbc5ff2444ce
+  version: 833a04a10549a95dc34458c195cbad61bbb6cb4d
   subpackages:
   - unix
-  - windows
 - name: golang.org/x/text
   version: b19bf474d317b857955b12035d2c5acb57ce8b01
   subpackages:

@@ -28,7 +28,7 @@ spec:
         - --kube-cert-service=kube-cert-manager
         - --kube-cert-service-port=8080
         - --ingress-name=webhooks
-        - --interval=10s
+        - --interval=1m
         - --kube-cert-class=default
         - --enable-events=false
         - --enable-metrics=false

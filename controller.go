@@ -23,6 +23,7 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
+	"go.uber.org/ratelimit"
 	extensions "k8s.io/api/extensions/v1beta1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -82,16 +83,25 @@ func (k *kubeCertIngress) serviceProcessor() error {
 	}
 
 	timer := time.NewTicker(k.config.Interval)
+	// @step: create a watcher for ingresses across all namespaces
+	watcher, err := k.client.Extensions().Ingresses("").Watch(metav1.ListOptions{})
+	if err != nil {
+		return fmt.Errorf("unable to watch on ingresses: %s", err)
+	}
+	// create a rate limiter - 10 per second
+	rate := ratelimit.New(10)
 
 	for {
 		select {
+		case <-watcher.ResultChan():
+			rate.Take()
 		case <-timer.C:
-			log.Debug("performing an synchronization of ingresses")
-			if err := k.synchronize(); err != nil {
-				log.WithFields(log.Fields{
-					"error": err.Error(),
-				}).Error("unable to synchronize the ingresses")
-			}
+		}
+		log.Debug("performing an synchronization of ingresses")
+		if err := k.synchronize(); err != nil {
+			log.WithFields(log.Fields{
+				"error": err.Error(),
+			}).Error("unable to synchronize the ingresses")
 		}
 	}
 }
