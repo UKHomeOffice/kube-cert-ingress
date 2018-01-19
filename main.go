@@ -69,17 +69,17 @@ func main() {
 				EnvVar: "INGRESS_NAME",
 				Value:  "kube-cert-webhooks",
 			},
+			cli.StringFlag{
+				Name:   "ingress-class",
+				Usage:  "the nginx class to apply on the webhooks ingress `ANNOTATION`",
+				EnvVar: "INGRESS_CLASS",
+				Value:  "nginx-external",
+			},
 			cli.DurationFlag{
 				Name:   "interval",
 				Usage:  "the service port where kube-cert-manager is listening on `PORT`",
 				EnvVar: "KUBE_CERT_SERVICE_PORT",
 				Value:  time.Second * 10,
-			},
-			cli.StringFlag{
-				Name:   "nginx-class",
-				Usage:  "the nginx class to apply on the webhooks ingress `ANNOTATION`",
-				EnvVar: "NGINX_CLASS",
-				Value:  "nginx-external",
 			},
 			cli.StringFlag{
 				Name:   "kube-cert-label",
