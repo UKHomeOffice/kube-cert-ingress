@@ -26,7 +26,7 @@ import (
 
 var (
 	// Version is the controller version
-	Version = "v0.0.1"
+	Version = "v0.0.2"
 	// GitSHA is the build sha
 	GitSHA = "unset"
 )
@@ -76,6 +76,12 @@ func main() {
 				Value:  time.Second * 10,
 			},
 			cli.StringFlag{
+				Name:   "nginx-class",
+				Usage:  "the nginx class to apply on the webhooks ingress `ANNOTATION`",
+				EnvVar: "NGINX_CLASS",
+				Value:  "nginx-external",
+			},
+			cli.StringFlag{
 				Name:   "kube-cert-label",
 				Usage:  "the label of the kube-cert-manager `ANNOTATION`",
 				EnvVar: "KUBE_CERT_ANNOTATION",
@@ -113,6 +119,7 @@ func main() {
 		Action: func(cx *cli.Context) error {
 			svc, err := newKubeCertIngressController(&Config{
 				EnableEvents:               cx.Bool("enable-events"),
+				IngressClass:               cx.String("ingress-class"),
 				IngressName:                cx.String("ingress-name"),
 				Interval:                   cx.Duration("interval"),
 				KubeCertClass:              cx.String("kube-cert-class"),

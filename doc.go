@@ -22,6 +22,8 @@ import "time"
 type Config struct {
 	// EnableEvents indicates we should create events
 	EnableEvents bool `yaml:"enable-events" json:"enable-events"`
+	// IngressClass is the class on the ingress to apply on the webhooks
+	IngressClass string `yaml:"ingress-class" json:"ingress-class"`
 	// IngressName is the name of the ingress we create
 	IngressName string `yaml:"ingress-name" json:"ingress-name"`
 	// Intervai is the service processor interval
