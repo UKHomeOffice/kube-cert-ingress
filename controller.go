@@ -139,8 +139,7 @@ func (k *kubeCertIngress) synchronize() error {
 		// @step: iterate the list of ingresses in the namespace
 		for i, _ := range list.Items {
 			// @check if the ingress supposed to be handled
-			found := k.isHandled(&list.Items[i])
-			if !found {
+			if found := k.isHandled(&list.Items[i]); !found {
 				log.WithFields(log.Fields{
 					"name":      list.Items[i].Name,
 					"namespace": namespace.Name,
@@ -195,8 +194,8 @@ func (k *kubeCertIngress) updateIngress(ingress *extensions.Ingress) error {
 		"name": k.config.IngressName,
 	}).Debug("attempting to update the ingress resource")
 
-	namespace := k.config.Namespace
 	name := k.config.IngressName
+	namespace := k.config.Namespace
 
 	var create bool
 	_, err := k.client.Extensions().Ingresses(namespace).Get(name, metav1.GetOptions{})
@@ -251,6 +250,9 @@ func (k *kubeCertIngress) buildIngress(hostnames []string) *extensions.Ingress {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      k.config.IngressName,
 			Namespace: k.config.Namespace,
+			Annotations: map[string]string{
+				"kubernetes.io/ingress.class": k.config.IngressClass,
+			},
 		},
 		Spec: extensions.IngressSpec{},
 	}
